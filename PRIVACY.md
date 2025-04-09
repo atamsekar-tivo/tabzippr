@@ -44,4 +44,4 @@ TabZippr is designed with privacy-first principles. We aim to be transparent abo
 This privacy policy may be updated to reflect changes in the extension's functionality or data handling practices. Last updated: 2025-04-08
 
 ## Contact
-If you have questions about this privacy policy or TabZippr's data handling practices, please file an issue in our repository.
+If you have questions about this privacy policy or TabZippr's data handling practices, please file an issue in our [repository.](https://github.com/atamsekar-tivo/tabzippr)
