@@ -1,0 +1,18 @@
+# Node modules and dependencies
+node_modules/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Build and distribution files
+dist/
+build/
+*.zip
+
+# Logs
+*.log
+npm-debug.log*

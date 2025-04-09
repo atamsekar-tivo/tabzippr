@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>TabZippr</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      width: 320px;
+      margin: 0;
+      padding: 16px;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: #1f2937;
+      background-color: #ffffff;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 8px;
+      width: 100%;
+    }
+
+    .header img {
+      width: 24px;
+      height: 24px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    #backupTabs {
+      background-color: #2563eb;
+      color: white;
+    }
+
+    #backupTabs:hover {
+      background-color: #1d4ed8;
+    }
+
+    #backupTabs:disabled {
+      background-color: #93c5fd;
+      cursor: not-allowed;
+    }
+
+    #restoreTabs {
+      background-color: #f3f4f6;
+      color: #374151;
+      border: 1px solid #d1d5db;
+    }
+
+    #restoreTabs:hover {
+      background-color: #e5e7eb;
+    }
+
+    #restoreTabs:disabled {
+      background-color: #f3f4f6;
+      color: #9ca3af;
+      cursor: not-allowed;
+    }
+
+    #status {
+      margin-top: 8px;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .success {
+      background-color: #ecfdf5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+    }
+
+    .error {
+      background-color: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+    }
+
+    .icon svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .tabs-count {
+      background-color: #f3f4f6;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      color: #6b7280;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    .footer {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid #e5e7eb;
+      font-size: 12px;
+      color: #6b7280;
+      text-align: center;
+    }
+
+    .duplicates-section {
+      background-color: #fff7ed;
+      border: 1px solid #ffedd5;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 12px;
+      display: none;
+    }
+
+    .duplicates-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .duplicates-title {
+      color: #c2410c;
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    .cleanup-button {
+      background-color: #c2410c;
+      color: white;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      cursor: pointer;
+      border: none;
+    }
+
+    .cleanup-button:hover {
+      background-color: #9a3412;
+    }
+
+    .duplicate-groups {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .duplicate-group {
+      padding: 8px;
+      background-color: #ffedd5;
+      border-radius: 4px;
+    }
+
+    .duplicate-title {
+      font-size: 13px;
+      color: #9a3412;
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .duplicate-count {
+      font-size: 12px;
+      color: #c2410c;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <img src="images/icon48.png" alt="TabZippr">
+      <h2>TabZippr</h2>
+    </div>
+    
+    <div class="tabs-count" id="tabsCount">
+      Loading tabs...
+    </div>
+
+    <div id="duplicatesSection" class="duplicates-section">
+      <div class="duplicates-header">
+        <span class="duplicates-title">Duplicate Tabs</span>
+        <button id="cleanupDuplicates" class="cleanup-button">Clean Up</button>
+      </div>
+      <div id="duplicateGroups" class="duplicate-groups">
+      </div>
+    </div>
+
+    <div class="button-group">
+      <button id="backupTabs">
+        <span class="icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+          </svg>
+        </span>
+        Backup Current Window
+      </button>
+      <button id="restoreTabs">
+        <span class="icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M19 12v7H5v-7H3v7c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7h-2zm-6 .67l2.59-2.58L17 11.5l-5 5-5-5 1.41-1.41L11 12.67V3h2v9.67z"/>
+          </svg>
+        </span>
+        Restore from Backup
+      </button>
+    </div>
+
+    <input type="file" id="restoreFile" accept=".zip">
+    <div id="status"></div>
+
+    <div class="footer">
+      Safely manage your browser sessions
+    </div>
+  </div>
+  <script src="js/popup.js"></script>
+</body>
+</html>
